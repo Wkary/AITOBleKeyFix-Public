@@ -1,0 +1,28 @@
+#!/sbin/sh
+# 兼容 Magisk / KernelSU / SukiSU 的模块安装入口
+umask 022
+OUTFD=$2
+ZIPFILE=$3
+
+ui_print() { echo "$1"; }
+
+# 尝试加载 util_functions（Magisk 在 /data/adb/magisk，KSU 会自行注入）
+UTIL=""
+for p in /data/adb/magisk/util_functions.sh /data/adb/ksu/util_functions.sh /data/adb/sukisu/util_functions.sh; do
+  [ -f "$p" ] && UTIL="$p" && break
+done
+
+if [ -n "$UTIL" ]; then
+  . "$UTIL"
+  install_module
+  exit 0
+else
+  # KSU/SukiSU 已自行完成解压，直接 source customize.sh 即可
+  ui_print "- (KSU/SukiSU native install mode)"
+  MODPATH=/data/adb/modules_update/aitoblekeyfix
+  # 等待文件解压完成
+  while [ ! -f "$MODPATH/module.prop" ]; do sleep 1; done
+  cd "$MODPATH"
+  [ -f ./customize.sh ] && . ./customize.sh
+  exit 0
+fi

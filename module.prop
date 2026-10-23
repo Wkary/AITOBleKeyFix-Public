@@ -1,0 +1,6 @@
+id=aitoblekeyfix
+name=AITO Ble Key Fix
+version=0.0.1
+versionCode=1
+author=@北梦南城丶
+description=问界/AITO 蓝牙车钥匙极速档：开机自动将 BLE 低延迟扫描设为 100/100ms，加入 Doze 白名单与 active 待机桶，并自动把 AITO 同步为系统应用。无 WebUI，重启生效。
